@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>续一集 · 六方向缩略图</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,800&family=Noto+Sans+SC:wght@400;500;700;900&family=Noto+Serif+SC:wght@400;600;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/style.css" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{width:1568px;background:#111;font-family:'Noto Sans SC',sans-serif;color:#fff;padding:40px 44px 36px}
+  .hd{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:26px}
+  .hd h1{font-size:38px;font-weight:900;letter-spacing:-.02em}
+  .hd p{font-size:13px;color:#8b8b8b;letter-spacing:.06em}
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  .cell{width:480px;height:300px;border-radius:16px;overflow:hidden;display:flex;align-items:center;gap:16px;padding:16px 16px 16px 20px;position:relative}
+  .cell .txt{flex:1;min-width:0}
+  .cell .num{font:700 11px 'Space Mono',monospace;letter-spacing:.14em;opacity:.55}
+  .cell h2{font-size:19px;line-height:1.2;margin:6px 0 4px;font-weight:900;letter-spacing:-.01em}
+  .cell .src{font-size:10.5px;line-height:1.45;opacity:.62;margin-bottom:8px}
+  .cell .idea{font-size:11.5px;line-height:1.6;opacity:.85}
+  .ph{flex:none;width:132px;height:284px;background:#0d0d0d;border-radius:19px;padding:3px;box-shadow:0 10px 24px rgba(0,0,0,.35)}
+  .scr{width:100%;height:100%;border-radius:16px;overflow:hidden;position:relative;background:#fff}
+  .padtop{height:14px;display:flex;align-items:center;justify-content:space-between;padding:0 9px;font-size:5px;opacity:.8}
+
+  /* 1 田中 */
+  .c1{background:#F2EBDD;color:#17130F}
+  .c1 .scr{background:#F2EBDD;color:#17130F}
+  .c1 .big{position:absolute;left:4px;top:58px;font-family:'Noto Serif SC',serif;font-size:62px;line-height:.82;font-weight:900;color:#17130F;writing-mode:vertical-rl}
+  .c1 .reddot{position:absolute;left:36px;top:16px;width:24px;height:24px;border-radius:50%;background:#C8321E}
+  .c1 .tiles{position:absolute;right:6px;top:34px;width:40px;display:grid;gap:3px}
+  .c1 .tiles i{display:block;height:18px;background:#17130F;opacity:.9}
+  .c1 .tiles i:nth-child(2){background:#6F7A63}
+  .c1 .tiles i:nth-child(4){background:#C8321E}
+  .c1 .tiles i:nth-child(5){background:#17130F;opacity:.25;height:26px}
+  .c1 .bot{position:absolute;left:8px;bottom:8px;right:8px;height:26px;background:#17130F;color:#F2EBDD;display:flex;align-items:center;justify-content:center;font-size:8px;letter-spacing:.1em}
+
+  /* 2 Morrison */
+  .c2{background:#E7E5E1;color:#232323}
+  .c2 .scr{background:#fff;color:#232323}
+  .c2 .ttl{font-size:11px;font-weight:700;padding:20px 12px 6px}
+  .c2 .row{display:flex;justify-content:space-between;align-items:center;margin:0 12px;padding:11px 0;border-bottom:1px solid #E6E6E6;font-size:7px;color:#6d6d6d}
+  .c2 .row b{font-weight:500;color:#232323;font-size:7.5px}
+  .c2 .peb{position:absolute;right:12px;bottom:44px;width:26px;height:26px;border-radius:50%;background:linear-gradient(145deg,#f7f7f7,#c9c8c5);box-shadow:inset 0 1px 2px #fff,0 2px 6px rgba(0,0,0,.25)}
+  .c2 .peb:after{content:'';position:absolute;inset:8px;border:1px solid #8f8e8b;border-radius:50%;border-right-color:transparent;border-bottom-color:transparent;transform:rotate(-30deg)}
+
+  /* 3 Halide */
+  .c3{background:#0A0A0A;color:#EDEDED}
+  .c3 .scr{background:#000}
+  .c3 .view{position:absolute;inset:0 0 44% 0;background:radial-gradient(120% 80% at 30% 30%,#4b3b2e,#171a20 60%,#050607)}
+  .c3 .view:after{content:'画面';position:absolute;left:8px;bottom:6px;font-size:5px;color:#7c7c7c;letter-spacing:.2em}
+  .c3 .hud{position:absolute;left:8px;top:20px;font:400 5px 'Space Mono',monospace;color:#FFCC00;letter-spacing:.12em}
+  .c3 .shelf{position:absolute;left:0;right:0;bottom:0;height:44%;background:#0b0b0b;border-top:1px solid #242424;padding:8px}
+  .c3 .sc{display:flex;justify-content:space-between;font:400 5px 'Space Mono',monospace;color:#777;letter-spacing:.1em}
+  .c3 .ruler{height:22px;margin-top:6px;background:repeating-linear-gradient(90deg,#3a3a3a 0 1px,transparent 1px 7px);position:relative}
+  .c3 .ruler b{position:absolute;left:50%;top:-3px;width:1px;height:26px;background:#FFCC00}
+  .c3 .ring{position:absolute;right:10px;bottom:52px;width:30px;height:30px;border-radius:50%;border:1.5px solid #FFCC00;display:flex;align-items:center;justify-content:center;font:700 7px 'Space Mono',monospace;color:#FFCC00}
+  .c3 .shut{position:absolute;left:50%;bottom:10px;transform:translateX(-50%);width:24px;height:24px;border-radius:50%;background:#FFCC00}
+
+  /* 4 Streaks */
+  .c4{background:linear-gradient(150deg,#FF6B4A,#7B5CE6);color:#fff}
+  .c4 .scr{background:linear-gradient(155deg,#FF6B4A 0%,#B65BD8 62%,#7B5CE6 100%);color:#fff}
+  .c4 .rings{position:absolute;left:8px;top:26px;width:112px;display:grid;grid-template-columns:1fr 1fr;gap:6px;justify-items:center}
+  .c4 .rg{width:40px;height:40px;border-radius:50%;border:2px solid rgba(255,255,255,.85);display:flex;align-items:center;justify-content:center;font:700 8px 'Space Mono',monospace}
+  .c4 .rg.g{border-color:#7FE3C0}
+  .c4 .rg.a{border-color:#FFD37A}
+  .c4 .rg.s{border-color:#FF9C8C}
+  .c4 .lab{font-size:4.5px;text-align:center;margin-top:2px;opacity:.9}
+  .c4 .fbtn{position:absolute;right:10px;bottom:16px;width:24px;height:24px;border-radius:50%;background:#fff;color:#7B5CE6;display:flex;align-items:center;justify-content:center;font-size:8px;box-shadow:0 4px 10px rgba(0,0,0,.3)}
+
+  /* 5 Playful */
+  .c5{background:#2A1E52;color:#fff}
+  .c5 .scr{background:#B6A2FF;color:#1B1330}
+  .c5 .dial{position:absolute;left:50%;top:30px;transform:translateX(-50%);width:96px;height:96px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ffd9c2,#FF7A2D 55%,#d4570f 100%);box-shadow:0 7px 0 #8f3a08,0 12px 18px rgba(60,20,0,.35);display:flex;flex-direction:column;align-items:center;justify-content:center;color:#2b1206}
+  .c5 .dial b{font:800 22px 'Bricolage Grotesque',sans-serif;letter-spacing:-.03em}
+  .c5 .dial span{font-size:5px;letter-spacing:.1em}
+  .c5 .thick{position:absolute;left:10px;right:10px;height:26px;border-radius:8px;background:#fff;box-shadow:0 4px 0 rgba(27,19,48,.35);display:flex;align-items:center;padding:0 8px;font-size:6px;font-weight:700}
+  .c5 .t1{bottom:64px}
+  .c5 .t2{bottom:34px;background:#D4FF3F}
+  .c5 .t3{bottom:4px;background:#FF7A2D;color:#2b1206}
+
+  /* 6 Republic */
+  .c6{background:#C9BFA6;color:#1E1A15}
+  .c6 .scr{background:#DED3B8;color:#1E1A15}
+  .c6 .frame{position:absolute;inset:8px;border:1.2px solid #1E1A15}
+  .c6 .frame:before{content:'';position:absolute;inset:3px;border:.6px solid #1E1A15}
+  .c6 .vtitle{position:absolute;right:18px;top:22px;writing-mode:vertical-rl;font-family:'LXGW WenKai','Noto Serif SC',serif;font-size:30px;line-height:1.15;letter-spacing:.06em}
+  .c6 .ticket{position:absolute;left:18px;top:24px;width:24px;height:110px;background:#F6EFDF;border:1px solid #1E1A15;writing-mode:vertical-rl;font-family:'LXGW WenKai',serif;font-size:9px;padding:5px 2px;letter-spacing:.18em}
+  .c6 .seal{position:absolute;left:18px;bottom:18px;width:22px;height:22px;background:#B03A2E;color:#F6EFDF;font-family:'LXGW WenKai',serif;font-size:13px;display:flex;align-items:center;justify-content:center}
+  .c6 .geo{position:absolute;right:10px;bottom:14px;width:70px;height:38px}
+  .c6 .geo i{position:absolute;bottom:0;width:0;height:0;border-left:17px solid transparent;border-right:17px solid transparent;border-bottom:26px solid #1E1A15}
+  .c6 .geo i:nth-child(2){left:24px;border-bottom-width:32px}
+  .c6 .geo i:nth-child(3){left:44px;border-bottom-width:20px}
+  .c6 .sun{position:absolute;right:8px;bottom:34px;width:16px;height:16px;border-radius:50%;background:#B03A2E}
+  .c6 .lines{position:absolute;left:8px;right:8px;bottom:6px;height:1px;background:#1E1A15;box-shadow:0 2px 0 #1E1A15,0 4px 0 #1E1A15}
+</style>
+</head>
+<body>
+  <div class="hd">
+    <h1>续一集 · 六个方向</h1>
+    <p>480 × 300 · 关键一屏 · 真字体 / 真配色 / 真骨架</p>
+  </div>
+  <div class="grid">
+
+    <div class="cell c1">
+      <div class="txt">
+        <div class="num">01 / BEST DESIGNER</div>
+        <h2>田中一光 · 戏单</h2>
+        <div class="src">平涂色块与巨大汉字，圆形只给追光</div>
+        <div class="idea">设置页做成一张海报：左边「续」字，右边六格戏码。红球是戏台上的一束光。</div>
+      </div>
+      <div class="ph"><div class="scr">
+        <div class="padtop"><span>22:41</span><span>红果</span></div>
+        <div class="reddot"></div>
+        <div class="big">续</div>
+        <div class="tiles"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="bot">自动上滑 · 运行中</div>
+      </div></div>
+    </div>
+
+    <div class="cell c2">
+      <div class="txt">
+        <div class="num">02 / BEST DESIGNER</div>
+        <h2>Jasper Morrison · 鹅卵石</h2>
+        <div class="src">super normal：安静、哑光、只讲究做工</div>
+        <div class="idea">球 44px，不运行时只留一道弧。设置是一张白纸，没有一张卡片。</div>
+      </div>
+      <div class="ph"><div class="scr">
+        <div class="padtop"><span>22:41</span><span>红果</span></div>
+        <div class="ttl">续一集</div>
+        <div class="row"><span>服务</span><b>运行中</b></div>
+        <div class="row"><span>模式</span><b>智能识别</b></div>
+        <div class="row"><span>间隔</span><b>25 秒</b></div>
+        <div class="row"><span>广告</span><b>自动跳过</b></div>
+        <div class="peb"></div>
+      </div></div>
+    </div>
+
+    <div class="cell c3">
+      <div class="txt">
+        <div class="num">03 / REAL REFERENCE</div>
+        <h2>Halide · 取景器</h2>
+        <div class="src">参考板 refs/board-apps-1.jpg</div>
+        <div class="idea">下半固定参数架 + 刻度尺，黄色只给下一次上滑。球是 30px 的对焦环。</div>
+      </div>
+      <div class="ph"><div class="scr">
+        <div class="view"></div>
+        <div class="hud">AUTO · 25s</div>
+        <div class="ring">12</div>
+        <div class="shelf">
+          <div class="sc"><span>智能识别</span><span>间隔 25s</span><span>广告 跳过</span></div>
+          <div class="ruler"><b></b></div>
+          <div class="shut"></div>
+        </div>
+      </div></div>
+    </div>
+
+    <div class="cell c4">
+      <div class="txt">
+        <div class="num">04 / REAL REFERENCE</div>
+        <h2>Streaks · 五个环</h2>
+        <div class="src">参考板 refs/board-apps-2.jpg</div>
+        <div class="idea">整屏渐变，环内数字、环外标签。第五个环就是悬浮球，缺口随倒计时闭合。</div>
+      </div>
+      <div class="ph"><div class="scr">
+        <div class="padtop"><span>22:41</span><span></span></div>
+        <div class="rings">
+          <div><div class="rg g">25</div><div class="lab">智能</div></div>
+          <div><div class="rg">15</div><div class="lab">定时</div></div>
+          <div><div class="rg a">3</div><div class="lab">广告</div></div>
+          <div><div class="rg s">12</div><div class="lab">日志</div></div>
+        </div>
+        <div class="fbtn">▶</div>
+      </div></div>
+    </div>
+
+    <div class="cell c5">
+      <div class="txt">
+        <div class="num">05 / WHEEL · APP #3</div>
+        <h2>玩味3D · 手感</h2>
+        <div class="src">(Not Boring) · 还原 70%</div>
+        <div class="idea">一颗巨大的凸起圆钮就是开关，硬下沿 + 球面高光。展开是一张厚面板。</div>
+      </div>
+      <div class="ph"><div class="scr">
+        <div class="padtop"><span>22:41</span><span></span></div>
+        <div class="dial"><b>25</b><span>秒后上滑</span></div>
+        <div class="thick t1">智能识别 · 已连接红果</div>
+        <div class="thick t2">广告自动跳过</div>
+        <div class="thick t3">暂停</div>
+      </div></div>
+    </div>
+
+    <div class="cell c6">
+      <div class="txt">
+        <div class="num">06 / WHEEL · EAST #3</div>
+        <h2>民国书衣 · 话本</h2>
+        <div class="src">鲁迅 / 陶元庆 · 还原 70%</div>
+        <div class="idea">纸色、题签、竖排书名、一方朱印。球是一枚「续」印，盖在画面右下。</div>
+      </div>
+      <div class="ph"><div class="scr">
+        <div class="frame"></div>
+        <div class="ticket">开关 · 续印</div>
+        <div class="vtitle">续<br>一集</div>
+        <div class="seal">续</div>
+        <div class="sun"></div>
+        <div class="geo"><i></i><i></i><i></i></div>
+        <div class="lines"></div>
+      </div></div>
+    </div>
+
+  </div>
+</body>
+</html>

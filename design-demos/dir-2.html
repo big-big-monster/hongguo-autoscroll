@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>续一集 · 方向 02 取景器</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{width:1440px;height:900px;overflow:hidden}
+  body{background:#050505;color:#EDEDED;font-family:'Noto Sans SC',sans-serif}
+  .board{position:relative;width:1440px;height:900px;overflow:hidden;background:#050505}
+  .col{position:absolute;top:0;bottom:0;width:1px;background:#141414}
+  .ruler-x{position:absolute;left:384px;right:40px;bottom:54px;height:26px;background:repeating-linear-gradient(90deg,#2c2c2c 0 1px,transparent 1px 9px);z-index:2}
+  .ruler-x:before{content:'';position:absolute;left:0;right:0;bottom:0;height:9px;background:repeating-linear-gradient(90deg,#4a4a4a 0 1px,transparent 1px 45px)}
+  .ruler-x .t{position:absolute;bottom:-16px;font:400 12px 'JetBrains Mono',monospace;color:#9a9a9a;letter-spacing:.04em}
+  .ruler-x .t1{left:0}.ruler-x .t2{left:33%}.ruler-x .t3{left:66%}.ruler-x .t4{right:0}
+  .board-foot{position:absolute;left:64px;right:64px;bottom:20px;display:flex;justify-content:space-between;font:400 12px 'Noto Sans SC',sans-serif;letter-spacing:.02em;color:#8a8a8a;z-index:3}
+
+  .top{position:absolute;left:64px;top:44px;width:290px}
+  .kicker{font:700 12px 'Noto Sans SC',sans-serif;letter-spacing:.06em;color:#FFCC00}
+  h1{font-size:46px;font-weight:900;letter-spacing:.06em;margin:12px 0 4px}
+  .sub{font:400 14px 'Noto Sans SC',sans-serif;letter-spacing:.02em;color:#9a9a9a}
+  .lead{margin-top:22px;font-size:15px;line-height:1.9;color:#bdbdbd}
+  .lead b{color:#EDEDED;font-weight:500}
+  .formline{margin-top:18px;padding-top:14px;border-top:1px solid #1f1f1f;font-size:14.5px;line-height:1.75;color:#a9a9a9}
+  .formline em{font-style:normal;color:#d0d0d0}
+
+  .pal{display:flex;align-items:center;gap:7px;margin-top:20px}
+  .pal i{width:18px;height:18px;display:block}
+  .pal i:nth-child(1){background:#000;outline:1px solid #2a2a2a}
+  .pal i:nth-child(2){background:#FFCC00}
+  .pal i:nth-child(3){background:#EDEDED}
+  .pal i:nth-child(4){background:#6a6a6a}
+  .pal span{font-size:12px;letter-spacing:.02em;color:#9a9a9a;margin-left:5px}
+
+  .notes{position:absolute;left:64px;top:520px;width:282px}
+  .notes h4{font-size:13px;font-weight:700;letter-spacing:.04em;color:#9a9a9a;margin-bottom:10px}
+  .statebox{height:96px;background:url(assets/drama.jpg) center 38%/cover;position:relative;display:flex;align-items:center;justify-content:space-around;padding:0 12px}
+  .statebox:before{content:'';position:absolute;inset:0;background:rgba(0,0,0,.62)}
+  .orb{position:relative;z-index:2;width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.45);font:700 12px 'JetBrains Mono',monospace;color:#EDEDED}
+  .orb.run{box-shadow:inset 0 0 0 1.5px #FFCC00}
+  .orb.run:before,.orb.run:after{content:'';position:absolute;width:2px;height:5px;background:#FFCC00}
+  .orb.run:before{top:-4px}.orb.run:after{bottom:-4px}
+  .orb.ad{box-shadow:inset 0 0 0 1.5px rgba(255,204,0,.8);outline:1px dashed rgba(255,204,0,.55);outline-offset:3px;color:#FFCC00}
+  .orb.pz{box-shadow:inset 0 0 0 1.5px #6a6a6a;color:#9a9a9a;letter-spacing:2px}
+  .orb.no{box-shadow:inset 0 0 0 1.5px #6a6a6a;color:#8a8a8a;position:relative;overflow:hidden}
+  .orb.no:after{content:'';position:absolute;width:2px;height:58px;background:#8a8a8a;transform:rotate(45deg)}
+  .stlabels{display:flex;justify-content:space-around;padding:8px 4px 0}
+  .stlabels span{font:400 13px 'Noto Sans SC',sans-serif;letter-spacing:.02em;color:#a9a9a9;width:56px;text-align:center}
+  .honest{margin-top:14px;font-size:14px;line-height:1.7;color:#9a9a9a}
+  .honest b{color:#d0d0d0;font-weight:500}
+
+  /* device */
+  .slot{position:absolute;transform-origin:top left;z-index:4}
+  .device{width:410px;height:864px;background:#161616;border-radius:50px;padding:10px;box-shadow:0 40px 100px rgba(0,0,0,.9),0 0 0 1px #242424}
+  .screen{width:390px;height:844px;border-radius:40px;overflow:hidden;position:relative;background:#000}
+  .hole{position:absolute;top:12px;left:50%;transform:translateX(-50%);width:11px;height:11px;background:#000;border-radius:50%;z-index:60}
+  .sb{position:absolute;top:0;left:0;right:0;height:38px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;font:400 12px 'JetBrains Mono',monospace;z-index:50}
+  .sb .icons{display:flex;align-items:center;gap:5px;font:600 9px 'JetBrains Mono',monospace}
+  .batt{width:20px;height:9px;border:1px solid currentColor;border-radius:2px;padding:1px;display:inline-block}
+  .batt i{display:block;height:100%;width:78%;background:currentColor;border-radius:1px}
+  .corner{position:absolute;width:10px;height:10px;border-color:#FFCC00;border-style:solid;opacity:.85;z-index:6}
+  .c-tl{left:0;top:0;border-width:1px 0 0 1px}
+  .c-tr{right:0;top:0;border-width:1px 1px 0 0}
+  .c-bl{left:0;bottom:0;border-width:0 0 1px 1px}
+  .c-br{right:0;bottom:0;border-width:0 1px 1px 0}
+  .tag{position:absolute;font:400 12px 'Noto Sans SC',sans-serif;letter-spacing:.02em;color:#9a9a9a;z-index:6}
+  .tag b{color:#FFCC00;font-weight:500}
+
+  .p1{left:384px;top:262px;transform:scale(.64)}
+  .p2{left:696px;top:128px;transform:scale(.72)}
+  .p3{left:1002px;top:238px;transform:scale(.64)}
+
+  /* settings */
+  .set{position:absolute;inset:0;background:#000;color:#EDEDED;padding:0 22px}
+  .set .sb{color:#EDEDED}
+  .set-head{position:absolute;left:22px;right:22px;top:46px;display:flex;align-items:flex-start;justify-content:space-between}
+  .set-head .n{font-size:14px;font-weight:700;letter-spacing:.12em}
+  .set-head .n small{display:block;font:400 12px 'JetBrains Mono',monospace;letter-spacing:.1em;color:#8a8a8a;margin-top:5px}
+  .set-head .v{font:400 12px 'JetBrains Mono',monospace;color:#8a8a8a;letter-spacing:.06em}
+  .hero{position:absolute;left:22px;top:104px;right:22px}
+  .hero .lab{font:400 12px 'JetBrains Mono',monospace;letter-spacing:.1em;color:#9a9a9a;display:flex;justify-content:space-between}
+  .hero .lab b{color:#FFCC00;font-weight:500}
+  .hero .num{font:800 112px 'JetBrains Mono',monospace;line-height:1;letter-spacing:-.06em;color:#FFCC00;margin-top:6px}
+  .hero .num em{font-style:normal;font-size:38px;vertical-align:22px;letter-spacing:-.02em;margin-left:2px}
+  .hero .hint{font-size:12px;color:#8a8a8a;letter-spacing:.02em;margin-top:0}
+  .ruler{position:absolute;left:22px;right:22px;top:282px;height:34px}
+  .ruler .track{position:absolute;left:0;right:0;top:8px;height:18px;background:repeating-linear-gradient(90deg,#2e2e2e 0 1px,transparent 1px 8px)}
+  .ruler .major{position:absolute;left:0;right:0;top:8px;height:18px;background:repeating-linear-gradient(90deg,#555 0 1px,transparent 1px 40px)}
+  .ruler .mark{position:absolute;left:143px;top:-4px;bottom:0;width:1px;background:#FFCC00}
+  .ruler .mark:before{content:'';position:absolute;top:-5px;left:-3px;width:7px;height:7px;background:#FFCC00}
+  .ruler .rl{position:absolute;bottom:-9px;font:400 12px 'JetBrains Mono',monospace;color:#8a8a8a;letter-spacing:.02em}
+  .rows{position:absolute;left:22px;right:22px;top:344px}
+  .r{height:64px;border-top:1px solid #1d1d1d;display:flex;align-items:center;justify-content:space-between}
+  .r .l b{display:block;font-size:14px;font-weight:500;letter-spacing:.02em}
+  .r .l small{display:block;font:400 12px 'JetBrains Mono',monospace;letter-spacing:.04em;color:#8a8a8a;margin-top:4px}
+  .r .rt{display:flex;align-items:center;gap:8px;font:500 12px 'JetBrains Mono',monospace;color:#EDEDED;letter-spacing:.04em}
+  .r .rt .dot{width:6px;height:6px;border-radius:50%;background:#EDEDED}
+  .r .rt .tg{width:34px;height:18px;border-radius:99px;background:#2a2a2a;position:relative}
+  .r .rt .tg:after{content:'';position:absolute;right:2px;top:2px;width:14px;height:14px;border-radius:50%;background:#8a8a8a}
+  .r .rt .tg.on{background:#3a3a3a}
+  .r .rt .tg.on:after{background:#EDEDED}
+  .setnote{position:absolute;left:22px;right:22px;top:684px;font-size:14px;line-height:1.6;color:#9a9a9a;letter-spacing:.01em}
+  .footbar{position:absolute;left:0;right:0;bottom:0;height:74px;border-top:1px solid #202020;display:flex;align-items:center;justify-content:space-between;padding:0 22px;background:#000}
+  .footbar .run{font:400 12px 'JetBrains Mono',monospace;color:#9a9a9a;letter-spacing:.08em;line-height:1.5}
+  .footbar .run b{color:#EDEDED;font-weight:500;display:block;font-size:12px}
+  .shutter{width:48px;height:48px;border-radius:50%;border:2px solid #FFCC00;display:flex;align-items:center;justify-content:center;gap:5px}
+  .shutter i{display:block;width:3px;height:13px;background:#FFCC00}
+
+  /* playback */
+  .play{position:absolute;inset:0;background:#000;color:#fff}
+  .photo{position:absolute;inset:0;background:url(assets/drama.jpg) center 32%/cover}
+  .scrim{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.66),transparent 30%,transparent 58%,rgba(0,0,0,.82))}
+  .p-top{position:absolute;left:20px;right:20px;top:46px;display:flex;justify-content:space-between;align-items:flex-start;z-index:5}
+  .p-top .a{font:500 12px 'JetBrains Mono',monospace;letter-spacing:.1em;color:#FFCC00}
+  .p-top .b{font-size:12.5px;letter-spacing:.04em;margin-top:7px;color:#EDEDED}
+  .p-top .c{font:400 12px 'JetBrains Mono',monospace;letter-spacing:.04em;color:rgba(255,255,255,.72);text-align:right}
+  .focus{position:absolute;right:22px;top:360px;width:68px;height:68px;border-radius:50%;background:rgba(0,0,0,.44);box-shadow:inset 0 0 0 1.5px #FFCC00;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:6;backdrop-filter:none}
+  .focus .n{font:700 20px 'JetBrains Mono',monospace;line-height:1;color:#EDEDED;letter-spacing:-.04em}
+  .focus .n em{font-style:normal;font-size:11px;color:#FFCC00;margin-left:1px}
+  .focus:before,.focus:after{content:'';position:absolute;width:2px;height:7px;background:#FFCC00}
+  .focus:before{top:-4px}.focus:after{bottom:-4px}
+  .cap{position:absolute;left:20px;bottom:150px;width:250px;z-index:5}
+  .cap h3{font-size:15px;font-weight:500;line-height:1.6;text-shadow:0 1px 10px rgba(0,0,0,.65)}
+  .cap p{font:400 12px 'JetBrains Mono',monospace;letter-spacing:.08em;color:rgba(255,255,255,.78);margin-top:7px}
+  .p-prog{position:absolute;left:20px;right:20px;bottom:110px;height:1px;background:rgba(255,255,255,.18);z-index:5}
+  .p-prog i{display:block;width:36%;height:100%;background:rgba(255,255,255,.85)}
+  .shelf{position:absolute;left:0;right:0;bottom:0;height:92px;background:#080808;border-top:1px solid #262626;z-index:7;padding:10px 20px 0}
+  .shelf .handle{width:36px;height:3px;background:#333;margin:0 auto 9px}
+  .shelf .grid{display:flex;align-items:center;justify-content:space-between}
+  .shelf .gesture{position:absolute;left:50%;bottom:7px;transform:translateX(-50%);width:96px;height:3px;border-radius:99px;background:rgba(255,255,255,.28)}
+  .shelf .col1 b{display:block;font:500 12px 'JetBrains Mono',monospace;color:#EDEDED;letter-spacing:.02em}
+  .shelf .col1 span{display:block;font:400 12px 'JetBrains Mono',monospace;color:#8a8a8a;letter-spacing:.06em;margin-top:3px}
+  .shelf .col2 b{display:block;font:700 14px 'JetBrains Mono',monospace;color:#FFCC00;letter-spacing:.01em}
+  .shelf .col2 span{display:block;font:400 12px 'JetBrains Mono',monospace;color:#8a8a8a;letter-spacing:.06em;margin-top:3px}
+  .shelf .pausebtn{width:38px;height:38px;border-radius:50%;box-shadow:inset 0 0 0 1.5px #FFCC00;display:flex;align-items:center;justify-content:center;gap:4px}
+  .shelf .pausebtn i{width:3px;height:12px;background:#FFCC00;display:block}
+
+  /* expanded */
+  .exp{position:absolute;inset:0;background:#000;color:#EDEDED}
+  .exp .photo{filter:brightness(.5)}
+  .exp .veil{position:absolute;inset:0;background:rgba(0,0,0,.4)}
+  .shelf2{position:absolute;left:0;right:0;bottom:0;height:700px;background:#0A0A0A;border-top:1px solid #2a2a2a;padding:20px 22px 0}
+  .shelf2 .handle{width:38px;height:3px;background:#333;margin:0 auto 14px}
+  .s2head{display:flex;align-items:flex-start;justify-content:space-between}
+  .s2head .k{font:400 12px 'JetBrains Mono',monospace;letter-spacing:.14em;color:#FFCC00}
+  .s2head h2{font-size:19px;font-weight:700;letter-spacing:.06em;margin-top:8px}
+  .s2head .x{font:300 20px 'JetBrains Mono',monospace;color:#777;line-height:1}
+  .s2count{display:flex;align-items:flex-end;justify-content:space-between;margin-top:16px;padding-bottom:12px;border-bottom:1px solid #1e1e1e}
+  .s2count .lab{font:400 12px 'JetBrains Mono',monospace;letter-spacing:.1em;color:#8a8a8a;padding-bottom:12px}
+  .s2count .n{font:800 74px 'JetBrains Mono',monospace;line-height:.9;color:#FFCC00;letter-spacing:-.06em}
+  .s2count .n em{font-style:normal;font-size:26px;vertical-align:16px;letter-spacing:0}
+  .s2ruler{height:24px;margin-top:12px;position:relative;background:repeating-linear-gradient(90deg,#2b2b2b 0 1px,transparent 1px 8px);background-size:100% 12px;background-repeat:no-repeat;background-position:bottom}
+  .s2ruler .mark{position:absolute;left:143px;top:0;bottom:0;width:1px;background:#EDEDED}
+  .s2blk{margin-top:16px}
+  .s2blk .lab{font:400 12px 'JetBrains Mono',monospace;letter-spacing:.1em;color:#8a8a8a;margin-bottom:7px}
+  .seg{display:flex;gap:8px}
+  .seg .o{flex:1;height:46px;box-shadow:inset 0 0 0 1px #262626;color:#9a9a9a;display:flex;align-items:center;justify-content:space-between;padding:0 11px;font:500 12px 'JetBrains Mono',monospace}
+  .seg .o small{font:400 10px 'JetBrains Mono',monospace;letter-spacing:.04em;opacity:.85}
+  .seg .on{box-shadow:inset 0 0 0 1px #FFCC00;color:#FFCC00}
+  .s2row{display:flex;align-items:center;justify-content:space-between;height:48px;border-bottom:1px solid #1b1b1b;font-size:13px;color:#d5d5d5}
+  .s2row .v{font:500 12px 'JetBrains Mono',monospace;color:#EDEDED;letter-spacing:.01em}
+  .s2row .v.y{color:#FFCC00}
+  .s2row .tg{width:36px;height:20px;border-radius:99px;background:#2a2a2a;position:relative}
+  .s2row .tg:after{content:'';position:absolute;right:2px;top:2px;width:16px;height:16px;border-radius:50%;background:#9a9a9a}
+  .s2row .tg.on{background:#3a3a3a}
+  .s2row .tg.on:after{background:#EDEDED}
+  .s2btns{position:absolute;left:22px;right:22px;bottom:22px;display:flex;gap:8px}
+  .s2btns .b1{flex:1.6;height:50px;background:#FFCC00;color:#000;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;letter-spacing:.1em}
+  .s2btns .b2{flex:1;height:50px;box-shadow:inset 0 0 0 1px #2f2f2f;display:flex;align-items:center;justify-content:center;font-size:13px;letter-spacing:.06em;color:#d5d5d5}
+  .s2foot{position:absolute;left:22px;bottom:86px;font:400 14px 'JetBrains Mono',monospace;letter-spacing:.02em;color:#9a9a9a;line-height:1.45}
+</style>
+</head>
+<body>
+<div class="board">
+  <div class="col" style="left:360px"></div>
+  <div class="col" style="left:680px"></div>
+  <div class="col" style="left:990px"></div>
+  <div class="col" style="left:1290px"></div>
+
+  <div class="top">
+    <div class="kicker">02 / 现实参照</div>
+    <h1>取景器</h1>
+    <div class="sub">参考 Halide Mark II · Lux Optics</div>
+    <div class="lead">把自动上滑做成一台相机：画面上，<b>参数架</b>在下；黄色只给「下一次动作」。悬浮球是一枚对焦环，环里读秒，像取景器里的焦点。</div>
+    <div class="formline"><em>form 来自内容：</em>自动上滑的本质是「等一个时机，然后按一下」——和按快门是同一种动作。</div>
+    <div class="pal"><i></i><i></i><i></i><i></i><span>黑 / 黄 / 白 / 灰</span></div>
+  </div>
+
+  <div class="notes">
+    <h4>悬浮球 四种状态</h4>
+    <div class="statebox">
+      <div class="orb run">12</div>
+      <div class="orb ad">03</div>
+      <div class="orb pz">Ⅱ</div>
+      <div class="orb no"></div>
+    </div>
+    <div class="stlabels"><span>运行中</span><span>等待广告</span><span>已暂停</span><span>未连接</span></div>
+    <div class="honest"><b>实现代价中：</b>等宽数字 + 刻度线（repeating-linear-gradient / Canvas）。不做模糊与玻璃，黑色半透明底保证压在亮画面上仍可读。<br><b>诚实：</b>黄色全屏不超过三处；参考板 refs/board-apps-1.jpg。</div>
+  </div>
+
+  <div class="ruler-x">
+    <span class="t t1">00</span><span class="t t2">20</span><span class="t t3">40</span><span class="t t4">60 S</span>
+  </div>
+  <div class="board-foot"><span>设置 / 播放 / 控制架</span><span>390 × 844 · Android 无障碍悬浮层</span></div>
+
+  <!-- settings -->
+  <div class="slot p1"><div class="device"><div class="screen">
+    <div class="set">
+      <div class="sb"><span>22:41</span><div class="icons"><span>◢</span><span>◔</span><span class="batt"><i></i></span></div></div>
+      <div class="hole"></div>
+      <div class="corner c-tl"></div><div class="corner c-tr"></div><div class="corner c-bl"></div><div class="corner c-br"></div>
+      <div class="set-head"><div class="n">续一集<small>AUTO SCROLL / SETTINGS</small></div><div class="v">v1.3</div></div>
+      <div class="hero">
+        <div class="lab"><span>INTERVAL / 间隔</span><b style="color:#8a8a8a">SMART · 智能</b></div>
+        <div class="num">25<em>″</em></div>
+        <div class="hint">智能模式只在片尾触发；定时模式按这个间隔上滑。</div>
+      </div>
+      <div class="ruler">
+        <div class="track"></div><div class="major"></div><div class="mark"></div>
+        <span class="rl" style="left:0">5</span><span class="rl" style="left:39%">25</span><span class="rl" style="right:0">60</span>
+      </div>
+      <div class="rows">
+        <div class="r"><div class="l"><b>模式</b><small>MODE</small></div><div class="rt">智能识别<span>›</span></div></div>
+        <div class="r"><div class="l"><b>广告处理</b><small>AD POLICY</small></div><div class="rt">自动跳过 <span class="tg on"></span></div></div>
+        <div class="r"><div class="l"><b>悬浮球</b><small>BUBBLE</small></div><div class="rt">开 <span class="tg on"></span></div></div>
+        <div class="r"><div class="l"><b>无障碍服务</b><small>ACCESS</small></div><div class="rt"><span class="dot"></span>已连接</div></div>
+        <div class="r"><div class="l"><b>运行日志</b><small>LOG</small></div><div class="rt">上次 22:41 <span>›</span></div></div>
+      </div>
+      <div class="setnote">只在红果短剧内识别；切出 App 或锁屏后自动停止。识别在本机完成，不上传。</div>
+      <div class="footbar">
+        <div class="run">RUNNING<b>00:42:10</b></div>
+        <div class="shutter"><i></i><i></i></div>
+      </div>
+    </div>
+  </div></div>
+  </div>
+  <div class="tag" style="left:384px;top:240px">A / <b>SETTINGS</b></div>
+
+  <!-- playback -->
+  <div class="slot p2"><div class="device"><div class="screen">
+    <div class="play">
+      <div class="photo"></div><div class="scrim"></div>
+      <div class="sb" style="color:#fff"><span>22:41</span><div class="icons"><span>◢</span><span>◔</span><span class="batt"><i></i></span></div></div>
+      <div class="hole"></div>
+      <div class="corner c-tl"></div><div class="corner c-tr"></div><div class="corner c-bl"></div><div class="corner c-br"></div>
+      <div class="p-top">
+        <div><div class="a">AUTO · SMART</div><div class="b">红果短剧 · 第 12 集</div></div>
+        <div class="c">05 / 40<br>00:42:10</div>
+      </div>
+      <div class="focus"><div class="n">12<em>″</em></div></div>
+      <div class="cap"><h3>她终于说出了那句话，<br>窗外的灯全亮着。</h3><p>EP 12 · 夜色告白</p></div>
+      <div class="p-prog"><i></i></div>
+      <div class="shelf">
+        <div class="handle"></div>
+        <div class="grid">
+          <div class="col1"><b>智能识别</b><span>MODE</span></div>
+          <div class="col2"><b>12″</b><span>NEXT</span></div>
+          <div class="col1" style="text-align:right"><b>跳过</b><span>AD</span></div>
+          <div class="pausebtn"><i></i><i></i></div>
+        </div>
+        <div class="gesture"></div>
+      </div>
+    </div>
+  </div></div>
+  </div>
+  <div class="tag" style="left:696px;top:106px">B / <b>PLAYBACK</b></div>
+
+  <!-- expanded -->
+  <div class="slot p3"><div class="device"><div class="screen">
+    <div class="exp">
+      <div class="photo"></div><div class="veil"></div>
+      <div class="sb" style="color:#fff"><span>22:41</span><div class="icons"><span>◢</span><span>◔</span><span class="batt"><i></i></span></div></div>
+      <div class="hole"></div>
+      <div class="shelf2">
+        <div class="handle"></div>
+        <div class="s2head"><div><div class="k">CONTROL SHELF</div><h2>自动上滑</h2></div><div class="x">×</div></div>
+        <div class="s2count"><div class="lab">NEXT SWIPE / 下一次</div><div class="n">12<em>″</em></div></div>
+        <div class="s2ruler"><div class="mark"></div></div>
+        <div class="s2blk"><div class="lab">MODE / 模式</div>
+          <div class="seg"><div class="o on">智能识别<small>片尾触发</small></div><div class="o">定时上滑<small>25″</small></div></div>
+        </div>
+        <div class="s2blk"><div class="lab">DETAIL / 细节</div>
+          <div class="s2row"><span>间隔</span><span class="v">25 秒</span></div>
+          <div class="s2row"><span>广告处理</span><span class="v y">自动跳过 · 等 5 秒</span></div>
+          <div class="s2row"><span>悬浮球</span><span class="v">开 · 单击暂停</span></div>
+          <div class="s2row"><span>无障碍服务</span><span class="v">已连接 · 红果短剧</span></div>
+          <div class="s2row" style="border-bottom:none"><span>运行日志</span><span class="v">上次 22:41 ›</span></div>
+        </div>
+        <div class="s2foot">PAUSE STOPS THE SERVICE · 长按悬浮球回到设置</div>
+        <div class="s2btns"><div class="b1">暂停服务</div><div class="b2">运行日志</div></div>
+      </div>
+    </div>
+  </div></div>
+  </div>
+  <div class="tag" style="left:1002px;top:216px">C / <b>CONTROL</b></div>
+</div>
+</body>
+</html>

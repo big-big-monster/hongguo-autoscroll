@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>续一集 · 方向 01 戏单</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&family=Noto+Serif+SC:wght@400;600;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{width:1440px;height:900px;overflow:hidden}
+  body{background:#F2EBDD;font-family:'Noto Sans SC',sans-serif;color:#17130F}
+  .board{position:relative;width:1440px;height:900px;overflow:hidden;background:#F2EBDD}
+  .frame{position:absolute;inset:18px;border:1px solid rgba(23,19,15,.26);pointer-events:none;z-index:9}
+  .topband{position:absolute;left:0;top:0;width:100%;height:92px;background:#17130F;color:#F2EBDD;display:flex;align-items:center;justify-content:space-between;padding:0 64px}
+  .topband .l{font-size:13px;letter-spacing:.32em;font-weight:500}
+  .topband .r{font-size:12px;letter-spacing:.08em;opacity:.8;font-family:'Noto Sans SC',sans-serif}
+
+  .info{position:absolute;left:64px;top:132px;width:288px}
+  .kicker{font:700 12px 'Noto Sans SC',sans-serif;letter-spacing:.06em;color:#C8321E}
+  .info h1{font-family:'Noto Serif SC',serif;font-weight:900;font-size:78px;line-height:1;letter-spacing:.02em;margin:14px 0 6px}
+  .sub{font-size:12px;letter-spacing:.22em;color:rgba(23,19,15,.72);margin-bottom:22px}
+  .info p{font-size:15px;line-height:1.9;color:rgba(23,19,15,.84)}
+  .info p b{font-weight:700}
+  .formline{margin-top:18px;padding-top:14px;border-top:1px solid rgba(23,19,15,.25);font-size:14.5px;line-height:1.8;color:rgba(23,19,15,.82)}
+  .formline em{font-style:normal;font-weight:700;color:#17130F}
+  .pal{display:flex;gap:6px;margin-top:18px;align-items:center}
+  .pal i{width:26px;height:26px;display:block;border-radius:50%}
+  .pal i:nth-child(1){background:#17130F}
+  .pal i:nth-child(2){background:#F2EBDD;box-shadow:inset 0 0 0 1px rgba(23,19,15,.3)}
+  .pal i:nth-child(3){background:#C8321E}
+  .pal i:nth-child(4){background:#6F7A63}
+  .pal span{font-size:12px;letter-spacing:.02em;color:rgba(23,19,15,.72);margin-left:6px}
+  .note{margin-top:16px;font-size:14px;line-height:1.7;color:rgba(23,19,15,.78)}
+
+  .states{position:absolute;left:64px;top:662px;width:300px}
+  .states h4{font-size:13px;font-weight:700;letter-spacing:.04em;color:rgba(23,19,15,.78);margin-bottom:12px}
+  .strow{display:flex;gap:20px}
+  .st{width:54px;text-align:center}
+  .st .orb{width:46px;height:46px;border-radius:50%;margin:0 auto 8px;display:flex;align-items:center;justify-content:center;font-family:'Noto Serif SC',serif;font-weight:600;font-size:14px}
+  .st .lb{font-size:13px;letter-spacing:.02em;color:rgba(23,19,15,.78);line-height:1.4}
+  .orb.run{background:#C8321E;color:#F2EBDD;box-shadow:0 0 0 3px #F2EBDD,0 0 0 4px rgba(23,19,15,.18)}
+  .orb.ad{background:#17130F;color:#F2EBDD;outline:1px dashed rgba(242,235,221,.85);outline-offset:-5px}
+  .orb.pause{background:#F2EBDD;color:#17130F;box-shadow:inset 0 0 0 2px #17130F}
+  .orb.off{background:#F2EBDD;color:rgba(23,19,15,.45);box-shadow:inset 0 0 0 2px #6F7A63;position:relative}
+  .orb.off:after{content:'';position:absolute;width:2px;height:30px;background:#6F7A63;transform:rotate(45deg)}
+  .vtext{position:absolute;right:52px;top:150px;writing-mode:vertical-rl;font-size:12px;letter-spacing:.36em;color:rgba(23,19,15,.62)}
+  .seal{position:absolute;left:64px;bottom:56px;width:46px;height:46px;background:#C8321E;color:#F2EBDD;font-family:'Noto Serif SC',serif;font-weight:900;font-size:24px;display:flex;align-items:center;justify-content:center}
+  .seal span{transform:translateY(1px)}
+  .vrule{position:absolute;left:368px;top:132px;bottom:56px;width:1px;background:rgba(23,19,15,.18)}
+
+  /* device */
+  .slot{position:absolute;transform-origin:top left}
+  .device{width:410px;height:864px;background:#141210;border-radius:50px;padding:10px;box-shadow:0 42px 90px rgba(23,19,15,.3),0 8px 22px rgba(23,19,15,.22)}
+  .screen{width:390px;height:844px;border-radius:40px;overflow:hidden;position:relative;background:#F2EBDD}
+  .hole{position:absolute;top:12px;left:50%;transform:translateX(-50%);width:11px;height:11px;background:#000;border-radius:50%;z-index:60}
+  .sb{position:absolute;top:0;left:0;right:0;height:38px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;font:500 12px 'Noto Sans SC';z-index:50}
+  .sb .icons{display:flex;align-items:center;gap:5px;font:600 9px 'Space Mono',monospace}
+  .batt{width:20px;height:9px;border:1px solid currentColor;border-radius:2px;padding:1px;display:inline-block}
+  .batt i{display:block;height:100%;width:78%;background:currentColor;border-radius:1px}
+
+  .s1left{left:392px;top:112px;transform:scale(.74);z-index:3}
+  .s2left{left:716px;top:70px;transform:scale(.68);z-index:2}
+  .s3left{left:1004px;top:228px;transform:scale(.68);z-index:4}
+
+  /* settings screen */
+  .s-settings{position:absolute;inset:0;background:#F2EBDD}
+  .s-head{position:absolute;left:20px;right:20px;top:44px;display:flex;justify-content:space-between;align-items:center;font-size:12px;letter-spacing:.08em}
+  .s-head b{font-weight:700;letter-spacing:.2em}
+  .s-head .acc{display:flex;align-items:center;gap:5px;color:rgba(23,19,15,.82)}
+  .s-head .acc i{width:6px;height:6px;border-radius:50%;background:#6F7A63;display:block}
+  .giant{position:absolute;left:0px;top:78px;font-family:'Noto Serif SC',serif;font-weight:900;font-size:268px;line-height:.8;writing-mode:vertical-rl;letter-spacing:0;color:#17130F}
+  .sideline{position:absolute;left:338px;top:424px;writing-mode:vertical-rl;font-size:12px;letter-spacing:.3em;color:rgba(23,19,15,.72);white-space:nowrap}
+  .tiles{position:absolute;right:16px;top:92px;display:grid;grid-template-columns:82px 82px;grid-auto-rows:100px;gap:8px}
+  .tile{padding:10px 9px;display:flex;flex-direction:column;justify-content:space-between;min-width:0}
+  .tile .k{font-size:12px;letter-spacing:.08em;color:#F2EBDD}
+  .tile .v{font-family:'Noto Serif SC',serif;font-weight:600;font-size:17px;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .tile.ink{background:#17130F;color:#F2EBDD}
+  .tile.red{background:#C8321E;color:#F2EBDD}
+  .tile.red .k{color:#F2EBDD}
+  .tile.sage{background:#5E6954;color:#F2EBDD}
+  .tile.sage .k{color:#F2EBDD}
+  .tile.line{box-shadow:inset 0 0 0 1.5px #17130F;color:#17130F}
+  .tile.line .k{color:rgba(23,19,15,.75)}
+  .s-copy{position:absolute;left:20px;top:470px;width:252px;font-size:14px;line-height:1.8;color:rgba(23,19,15,.8)}
+  .s-copy b{font-weight:700;color:#17130F}
+  .s-link{position:absolute;left:20px;top:602px;font-size:14px;font-weight:700;letter-spacing:.04em;border-bottom:1.5px solid #17130F;padding-bottom:3px}
+  .s-priv{position:absolute;left:20px;top:650px;width:240px;font-size:12.5px;line-height:1.7;color:rgba(23,19,15,.72)}
+  .s-bar{position:absolute;left:12px;right:12px;bottom:26px;height:64px;background:#17130F;color:#F2EBDD;display:flex;align-items:center;justify-content:space-between;padding:0 18px}
+  .s-bar .l{display:flex;flex-direction:column;gap:2px}
+  .s-bar .l b{font-size:15px;font-weight:700;letter-spacing:.06em}
+  .s-bar .l span{font-size:12.5px;letter-spacing:.04em;color:rgba(242,235,221,.72)}
+  .s-bar .stop{display:flex;align-items:center;gap:8px;font-size:13.5px;letter-spacing:.08em}
+  .s-bar .stop i{width:9px;height:9px;background:#C8321E;display:block}
+
+  /* playback screen */
+  .s-play{position:absolute;inset:0;background:#0b0b0b;color:#fff}
+  .photo{position:absolute;inset:0;background:url(assets/drama.jpg) center 32%/cover no-repeat}
+  .scrim{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.55),rgba(0,0,0,0) 26%,rgba(0,0,0,0) 62%,rgba(0,0,0,.72))}
+  .p-top{position:absolute;left:18px;right:20px;top:42px;display:flex;align-items:center;justify-content:space-between;z-index:5}
+  .p-top .l{display:flex;align-items:center;gap:12px;font-size:12.5px;letter-spacing:.04em}
+  .p-top .back{font-size:24px;line-height:1;font-weight:300;transform:translateY(-1px)}
+  .p-top .r{font-size:16px;letter-spacing:.1em;opacity:.85}
+  .p-cap{position:absolute;left:20px;bottom:92px;width:250px;z-index:5}
+  .p-cap h3{font-size:14.5px;font-weight:500;line-height:1.55;text-shadow:0 1px 8px rgba(0,0,0,.6)}
+  .p-cap p{margin-top:6px;font-size:12.5px;letter-spacing:.08em;color:rgba(255,255,255,.75)}
+  .p-prog{position:absolute;left:20px;right:20px;bottom:44px;height:2px;background:rgba(255,255,255,.22);z-index:5}
+  .p-prog i{display:block;width:36%;height:100%;background:rgba(255,255,255,.9)}
+  .bubble{position:absolute;right:20px;top:360px;width:68px;height:68px;display:flex;align-items:center;justify-content:center;z-index:6}
+  .bubble .ring{position:absolute;inset:3px;border-radius:50%;background:conic-gradient(#F2EBDD 0 286deg,rgba(242,235,221,.22) 286deg 360deg);-webkit-mask:radial-gradient(circle,transparent 62%,#000 63%);mask:radial-gradient(circle,transparent 62%,#000 63%)}
+  .bubble .core{width:52px;height:52px;border-radius:50%;background:#C8321E;color:#F2EBDD;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 10px 26px rgba(0,0,0,.4)}
+  .bubble .core b{font-family:'Noto Serif SC',serif;font-size:18px;font-weight:600;line-height:1;letter-spacing:-.02em}
+
+  /* expanded screen */
+  .s-exp{position:absolute;inset:0;background:#111}
+  .s-exp .photo{filter:brightness(.55) saturate(.9)}
+  .s-exp .veil{position:absolute;inset:0;background:rgba(10,8,6,.42)}
+  .sheet{position:absolute;left:0;right:0;bottom:0;height:622px;background:#F2EBDD;border-radius:22px 22px 0 0;padding:26px 22px 22px;color:#17130F}
+  .handle{position:absolute;top:10px;left:50%;transform:translateX(-50%);width:38px;height:4px;background:rgba(23,19,15,.32)}
+  .sh-head{display:flex;align-items:flex-start;justify-content:space-between}
+  .sh-head h2{font-family:'Noto Serif SC',serif;font-size:23px;font-weight:900;letter-spacing:.08em}
+  .sh-head .stat{background:#C8321E;color:#F2EBDD;font-size:12px;letter-spacing:.06em;padding:5px 9px}
+  .count{display:flex;align-items:flex-end;justify-content:space-between;margin-top:22px;padding-bottom:16px;border-bottom:1.5px solid #17130F}
+  .count .lab{font-size:12.5px;letter-spacing:.14em;color:rgba(23,19,15,.7);padding-bottom:10px}
+  .count .num{font-family:'Noto Serif SC',serif;font-weight:900;font-size:66px;line-height:.9;letter-spacing:-.01em}
+  .count .num em{font-style:normal;font-size:26px;vertical-align:14px;margin-left:2px}
+  .blk{margin-top:17px}
+  .blk .lab{font-size:12px;letter-spacing:.14em;color:rgba(23,19,15,.65);margin-bottom:8px}
+  .seg{display:flex;gap:8px}
+  .seg .o{flex:1;height:50px;display:flex;align-items:center;justify-content:space-between;padding:0 12px;font-size:13.5px;font-weight:700;letter-spacing:.02em}
+  .seg .o small{font-weight:500;font-size:10.5px;opacity:.72;letter-spacing:.06em}
+  .seg .on{background:#17130F;color:#F2EBDD}
+  .seg .on small{opacity:.7}
+  .seg .off{box-shadow:inset 0 0 0 1.5px rgba(23,19,15,.7)}
+  .rowline{display:flex;align-items:center;justify-content:space-between;height:45px;border-bottom:1px solid rgba(23,19,15,.22);font-size:13.5px}
+  .rowline .v{font-weight:700}
+  .sw{width:42px;height:24px;border-radius:999px;background:#17130F;position:relative}
+  .sw:after{content:'';position:absolute;right:2px;top:2px;width:20px;height:20px;border-radius:50%;background:#F2EBDD}
+  .sh-btns{position:absolute;left:22px;right:22px;bottom:20px;display:flex;gap:8px}
+  .sh-btns .b1{flex:1.5;height:52px;background:#17130F;color:#F2EBDD;display:flex;align-items:center;justify-content:center;font-size:14.5px;font-weight:700;letter-spacing:.1em}
+  .sh-btns .b2{flex:1;height:52px;box-shadow:inset 0 0 0 1.5px #17130F;display:flex;align-items:center;justify-content:center;font-size:13.5px;letter-spacing:.06em}
+  .sh-foot{position:absolute;left:22px;bottom:80px;font-size:12px;letter-spacing:.04em;color:rgba(23,19,15,.62)}
+</style>
+</head>
+<body>
+<div class="board">
+  <div class="topband">
+    <div class="l">续一集 · 方向 01</div>
+    <div class="r">田中一光 · 最佳设计师</div>
+  </div>
+  <div class="frame"></div>
+  <div class="vrule"></div>
+
+  <div class="info">
+    <div class="kicker">01 / 最佳设计师</div>
+    <h1>戏单</h1>
+    <div class="sub">连 台 本 戏</div>
+    <p>把设置做成一出连台本戏的戏单。左边一个<b>「续」</b>字占掉半个版面，右边六格就是六项设置；朱红只给正在跑的那一处，像戏台上唯一的一束追光。</p>
+    <div class="formline"><em>form 来自内容：</em>短剧一集接一集，就是连台本戏；界面该像戏单，而不是系统设置页。</div>
+    <div class="pal"><i></i><i></i><i></i><i></i><span>墨 / 纸 / 朱 / 灰绿</span></div>
+    <div class="note">实现代价低：纯色块 + 一个子集化衬线大字 + 自绘圆环。诚实降级：纸张纤维与套印错位不做，保持平涂。</div>
+  </div>
+
+  <div class="states">
+    <h4>悬浮球 四种状态</h4>
+    <div class="strow">
+      <div class="st"><div class="orb run">12″</div><div class="lb">运行中<br>倒计时</div></div>
+      <div class="st"><div class="orb ad">03″</div><div class="lb">等待广告<br>虚线圈</div></div>
+      <div class="st"><div class="orb pause">Ⅱ</div><div class="lb">已暂停<br>双竖线</div></div>
+      <div class="st"><div class="orb off"></div><div class="lb">未连接<br>一道斜线</div></div>
+    </div>
+  </div>
+  <div class="seal"><span>续</span></div>
+  <div class="vtext">一集接一集 · 不必动手</div>
+
+  <!-- 1 设置 -->
+  <div class="slot s1left">
+    <div class="device"><div class="screen">
+      <div class="s-settings">
+        <div class="sb"><span>22:41</span><div class="icons"><span>◢</span><span>◔</span><span class="batt"><i></i></span></div></div>
+        <div class="hole"></div>
+        <div class="s-head"><b>续一集</b><div class="acc"><i></i>无障碍已连接</div></div>
+        <div class="giant">续</div>
+        <div class="sideline">一集接一集</div>
+        <div class="tiles">
+          <div class="tile red"><div class="k">模式</div><div class="v">智能</div></div>
+          <div class="tile line"><div class="k">间隔</div><div class="v">25″</div></div>
+          <div class="tile ink"><div class="k">广告</div><div class="v">跳过</div></div>
+          <div class="tile sage"><div class="k">悬浮球</div><div class="v">开</div></div>
+          <div class="tile line"><div class="k">日志</div><div class="v">查看</div></div>
+          <div class="tile ink" style="opacity:.9"><div class="k">版本</div><div class="v">1.3</div></div>
+        </div>
+        <div class="s-copy">片尾出现<b>「上滑继续观看」</b>时自动上滑一集；广告先尝试点跳过，点不到就等 5 秒再滑。</div>
+        <div class="s-link">查看运行日志 ›</div>
+        <div class="s-priv">识别与日志只留在本机。</div>
+        <div class="s-bar">
+          <div class="l"><b>运行中</b><span>红果短剧 · 第 12 集</span></div>
+          <div class="stop"><i></i>停止</div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- 2 播放 -->
+  <div class="slot s2left">
+    <div class="device"><div class="screen">
+      <div class="s-play">
+        <div class="photo"></div>
+        <div class="scrim"></div>
+        <div class="sb" style="color:#fff"><span>22:41</span><div class="icons"><span>◢</span><span>◔</span><span class="batt"><i></i></span></div></div>
+        <div class="hole"></div>
+        <div class="p-top">
+          <div class="l"><span class="back">‹</span><span>红果短剧 · 第 12 集</span></div>
+          <div class="r">⋯</div>
+        </div>
+        <div class="p-cap">
+          <h3>她终于说出了那句话，<br>窗外的灯全亮着。</h3>
+          <p>第 12 集 · 夜色告白</p>
+        </div>
+        <div class="bubble">
+          <div class="ring"></div>
+          <div class="core"><b>12″</b></div>
+        </div>
+        <div class="p-prog"><i></i></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- 3 展开 -->
+  <div class="slot s3left">
+    <div class="device"><div class="screen">
+      <div class="s-exp">
+        <div class="photo"></div>
+        <div class="veil"></div>
+        <div class="sb" style="color:#fff"><span>22:41</span><div class="icons"><span>◢</span><span>◔</span><span class="batt"><i></i></span></div></div>
+        <div class="hole"></div>
+        <div class="sheet">
+          <div class="handle"></div>
+          <div class="sh-head"><h2>续一集</h2><div class="stat">运行中</div></div>
+          <div class="count">
+            <div class="lab">下 一 次 上 滑</div>
+            <div class="num">12<em>″</em></div>
+          </div>
+          <div class="blk"><div class="lab">模式</div>
+            <div class="seg">
+              <div class="o on">智能识别<small>片尾触发</small></div>
+              <div class="o off">定时 25″<small>固定间隔</small></div>
+            </div>
+          </div>
+          <div class="blk"><div class="lab">广告</div>
+            <div class="rowline"><span>跳过按钮 → 等 5 秒再滑</span><div class="sw"></div></div>
+            <div class="rowline"><span>悬浮球</span><span class="v">开 · 可拖动</span></div>
+            <div class="rowline"><span>调试日志</span><span class="v">上次 22:41 ›</span></div>
+            <div class="rowline" style="border-bottom:none"><span>识别词</span><span class="v">上滑继续观看</span></div>
+          </div>
+          <div class="sh-foot">长按悬浮球，随时回到这里。</div>
+          <div class="sh-btns"><div class="b1">暂停服务</div><div class="b2">运行日志</div></div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+</div>
+</body>
+</html>

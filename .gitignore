@@ -1,0 +1,26 @@
+# 本机工具链（SDK / Gradle，约 18GB）
+.tools/
+
+# 构建产物
+.gradle/
+build/
+app/build/
+test/gate-app/build/
+test/gate-app/app/build/
+test/gate-app/.gradle/
+
+# 本机路径配置
+local.properties
+test/gate-app/local.properties
+
+# APK 通过 GitHub Release 分发，不进仓库
+dist/
+
+# 设计过程临时截图
+.tmp-*.png
+
+# IDE
+.idea/
+*.iml
+.vscode/
+design-demos/refs/
