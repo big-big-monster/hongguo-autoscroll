@@ -13,10 +13,12 @@
   - 「广告」角标（含「广告 15s」这类剩余秒数）、广告 SDK 控件（穿山甲 `openadsdk` / `tt_video_ad` / `splash_ad` 等 view id 与 class）
   - 直播购物页（「进入直播间」「直播中」「讲解中」「已售 N 件」）、游戏推广页（「点击进入游戏」「点击试玩」）
   - 商业词组合：「优选服务」「进入直播间」单词即判定；「预约 / 咨询 / 查看详情…」同屏两个词、或一个词 + 严格「广告」标签
-  - 跳过按钮自动点击（排除「跳过片头」，带倒计时的「跳过 5」归零前不点）
-  - 直播购物页从 0.60 屏高起手，避开底部可滚动商品面板吃掉手势
+  - 跳过按钮自动点击：文字与 **view id** 两条路（无文字的图标按钮靠 `tt_splash_skip_btn` 这类 id 认），排除「跳过片头」，
+    带倒计时的「跳过 5」归零前不点；可点控件占屏超过 40% 视为容器，不点它
+  - 上滑提示按前缀认：「上滑继续观看短剧」「上滑继续看短剧」两种写法都算
+  - 直播购物页 / 直播播放器（`ttlive_player_render_view`）从 0.60 屏高起手，避开底部可滚动商品面板吃掉手势
   - 一波广告最多滑 8 次 / 45 秒；倍速面板（「锁定倍速」等）在屏上时暂停一切自动滑动
-  - **广告力度**：标准（只认文字与控件证据）/ 强力（再加「整页读不到文字」的画面型广告兜底，5 分钟最多 4 次）
+  - **广告力度**：标准（只认文字与控件证据）/ 强力（再加「整页读不到文字」的画面型广告兜底，5 分钟最多 4 次，且只在播放页生效）
 - **定时模式**：固定间隔上滑
 - **悬浮球**：显示 待机 / 运行 / 广告 状态，可拖动、点击启停
 
@@ -55,7 +57,7 @@ adb logcat -s GateTest
 
 ## 已知限制
 
-- 广告识别依赖无障碍树里能读到的文字与控件 id：红果改版文案、或广告画面完全由 SDK 自绘（读不到一个字）时可能识别不到；「强力」模式的空白页兜底能覆盖一部分，但无文字的正片也有被误滑的风险，所以默认不开
+- 广告识别依赖无障碍树里能读到的文字与控件 id：红果改版文案、或广告画面完全由 SDK 自绘（读不到一个字）时可能识别不到；「强力」模式的空白页兜底能覆盖一部分，但无文字的正片也有被误滑的风险（已限制成只在播放页生效、且 5 分钟最多 4 次），所以默认不开
 - 红果为 arm64 应用，x86_64 模拟器（无 ARM 转译）无法安装，测试 App 是行为级验证；真机表现以实际日志为准
 - 应用核心是文本启发式识别，红果改版文案后需要同步更新关键词（片尾提示词见 `AdDetector.END_KEYWORDS`，广告特征见 `AdDetector` 顶部的正则与关键词表）
 
@@ -66,6 +68,8 @@ adb logcat -s GateTest
 - [lifeiyu-44/hongguo-ad-skipper](https://github.com/lifeiyu-44/hongguo-ad-skipper) —— 倒计时两种文案、角标秒数、拆分布局配对、直播/游戏/商城推广特征、空白页兜底
 - [jvkal/-hongguo-ad-swiper](https://github.com/jvkal/-hongguo-ad-swiper) —— 商业词组合判定、倍速面板守卫、滑动起点避让
 - [Persimmonsss/ad-skipper](https://github.com/Persimmonsss/ad-skipper) —— 广告 SDK 控件识别
+- [baidu0013/hongguo-short-drama-gkd](https://github.com/baidu0013/hongguo-short-drama-gkd) —— 带真机快照的 GKD 规则：穿山甲 `tt_splash_skip_btn`、短剧页 Activity、直播播放器控件 id
+- [pxlwjp0425/autoskip](https://github.com/pxlwjp0425/autoskip) —— 点击目标占屏面积上限（>40% 视为容器）这个防误触护栏
 - [lnzx/Peeler](https://github.com/lnzx/Peeler) —— LSPosed 方案（需 root），用于对照广告来源
 
 ## License

@@ -103,6 +103,7 @@ public class AutoScrollService extends AccessibilityService {
     private boolean running;
     private String targetPackage;
     private String lastForegroundPackage;
+    private String lastActivityClass = "";
     private String targetLabel = "";
 
     private String mode = MODE_SMART;
@@ -571,7 +572,8 @@ public class AutoScrollService extends AccessibilityService {
         if (targetPackage == null || fg == null || !targetPackage.equals(fg)) return;
 
         long now = System.currentTimeMillis();
-        AdDetector.Snapshot scan = AdDetector.scan(root);
+        DisplayMetrics dm = getResources().getDisplayMetrics();
+        AdDetector.Snapshot scan = AdDetector.scan(root, dm.widthPixels, dm.heightPixels);
         if (debugEnabled) logSnapshot(scan.texts, now);
 
         // 倍速面板里的「上滑锁定倍速」和片尾提示同形，面板在屏上时一律不滑
@@ -667,7 +669,8 @@ public class AutoScrollService extends AccessibilityService {
             adAttempts = 0;
             adWaveTimedOut = false;
             log("ad detected: " + scan.reason
-                    + (scan.countdownSec > 0 ? " · " + scan.countdownSec + "s" : ""));
+                    + (scan.countdownSec > 0 ? " · " + scan.countdownSec + "s" : "")
+                    + (activityShort().isEmpty() ? "" : " @" + activityShort()));
         }
         lastAdEvidenceAt = now;
 
@@ -705,14 +708,16 @@ public class AutoScrollService extends AccessibilityService {
             }
             return;
         }
-        long gap = (scan.liveShop || AD_LEVEL_STRONG.equals(adLevel))
+        // 直播页（商品面板 / 直播播放器）要更急，手势也要从更高处起手
+        boolean livePage = scan.liveShop || scan.livePlayer;
+        long gap = (livePage || AD_LEVEL_STRONG.equals(adLevel))
                 ? AD_SWIPE_GAP_FAST_MS : AD_SWIPE_GAP_MS;
         if (lastSmartSwipeAt != 0 && now - lastSmartSwipeAt < gap) return;
 
         adAttempts++;
         lastSmartSwipeAt = now;
         log("ad swipe " + adAttempts + "/" + maxAdAttempts() + " (" + scan.reason + ")");
-        swipeUp("ad", scan.liveShop);
+        swipeUp("ad", livePage);
         promptSince = 0;
         lastKeywordPresent = false;
     }
@@ -753,6 +758,7 @@ public class AutoScrollService extends AccessibilityService {
         }
         if (now - blankSince < AD_BLANK_CONFIRM_MS) return false;
         if (lastAdEvidenceAt == 0 || now - lastAdEvidenceAt > AD_BLANK_EVIDENCE_MS) return false;
+        if (!activityLooksLikePlayer()) return false;
         if (!allowBlankFlip(now)) return false;
 
         lastAdEvidenceAt = now;
@@ -885,10 +891,33 @@ public class AutoScrollService extends AccessibilityService {
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
         if (event.getEventType() == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
+            // 红果用的是番茄那套壳：短剧页是 com.dragon.read...ShortSeriesActivity，
+            // 阅读页是 ...ReaderActivity。窗口状态事件里的 className 就是 Activity 名
+            CharSequence pkg = event.getPackageName();
+            CharSequence cls = event.getClassName();
+            if (pkg != null && cls != null && pkg.toString().equals(targetPackage)) {
+                lastActivityClass = cls.toString();
+            }
             currentForegroundPackage();
             updateBubbleState();
             syncBubble();
         }
+    }
+
+    private String activityShort() {
+        if (lastActivityClass.isEmpty()) return "";
+        int dot = lastActivityClass.lastIndexOf('.');
+        return dot >= 0 ? lastActivityClass.substring(dot + 1) : lastActivityClass;
+    }
+
+    /**
+     * 当前页是不是「播放页」。空白页兜底只在播放页生效，页面类型拿不到时放行（有的机型不上报）。
+     */
+    private boolean activityLooksLikePlayer() {
+        if (lastActivityClass.isEmpty()) return true;
+        String c = lastActivityClass;
+        return c.contains("ShortSeries") || c.contains("Reader")
+                || c.contains("Player") || c.contains("Video");
     }
 
     @Override
